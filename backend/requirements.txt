@@ -3,5 +3,5 @@ torch
 transformers
 spacy
 gunicorn
-flash-cors
+flask-cors
 waitress
