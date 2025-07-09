@@ -5,6 +5,12 @@ import torch
 import spacy
 from dataset import get_response
 from flask_cors import CORS
+try:
+    nlp = spacy.load("en_core_web_sm")
+except OSError:
+    print("Downloading spaCy model...")
+    spacy.cli.download("en_core_web_sm")
+    nlp = spacy.load("en_core_web_sm")
 
 print("Loading AI model... (Try'O Bot)")
 nlp = spacy.load("en_core_web_sm")
