@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Try'O Bot</title>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h2>🤖 Try'O Bot</h2>
+  <div id="g_id_onload"
+       data-client_id="YOUR_GOOGLE_CLIENT_ID"
+       data-callback="onSignIn">
+  </div>
+  <div class="g_id_signin" data-type="standard"></div>
+
+  <div class="chat-ui" style="display:none;">
+    <div id="chat-box"></div>
+    <input type="text" id="msg" placeholder="Type your message">
+    <button onclick="sendMsg()">Send</button>
+  </div>
+
+  <script>
+    const api = "https://your-backend-url.onrender.com/chat"; // Update this!
+    function onSignIn(response) {
+      document.querySelector(".chat-ui").style.display = "block";
+    }
+
+    function appendMsg(who, msg) {
+      const box = document.getElementById("chat-box");
+      const div = document.createElement("div");
+      div.textContent = `${who}: ${msg}`;
+      box.appendChild(div);
+    }
+
+    function sendMsg() {
+      const msgInput = document.getElementById("msg");
+      const msg = msgInput.value;
+      if (!msg) return;
+
+      appendMsg("You", msg);
+      msgInput.value = "";
+
+      fetch(api, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: msg })
+      })
+      .then(res => res.json())
+      .then(data => appendMsg("Try'O Bot", data.response))
+      .catch(err => appendMsg("Try'O Bot", "⚠️ Error contacting server"));
+    }
+  </script>
+</body>
+</html>
